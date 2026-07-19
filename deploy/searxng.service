@@ -1,0 +1,15 @@
+[Unit]
+Description=Agent Voice local SearXNG service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/agentvoice/agent-voice-web/scripts/manage-searxng.sh start
+ExecStop=/home/agentvoice/agent-voice-web/scripts/manage-searxng.sh stop
+TimeoutStartSec=120
+TimeoutStopSec=60
+
+[Install]
+WantedBy=default.target

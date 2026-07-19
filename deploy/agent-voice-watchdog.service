@@ -1,0 +1,13 @@
+[Unit]
+Description=Agent Voice health watchdog
+After=agent-voice.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/agentvoice/agent-voice-web/.venv/bin/python /home/agentvoice/agent-voice-web/scripts/agent-voice-watchdog.py
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/state/claude-voice

@@ -1,0 +1,7 @@
+[Unit]
+Description=Agent Voice full local service chain
+Wants=sing-box.service searxng.service sglang-qwen36.service qwen3-tts.service speaker-verifier.service claude-voice.service claude-voice-bootstrap.service agent-voice-watchdog.timer
+After=sing-box.service searxng.service sglang-qwen36.service qwen3-tts.service speaker-verifier.service claude-voice.service claude-voice-bootstrap.service
+
+[Install]
+WantedBy=default.target

@@ -1,8 +1,14 @@
 [Unit]
 Description=Local Claude continuous voice gateway
+Wants=sing-box.service
+Wants=searxng.service
+Wants=sglang-qwen36.service
 Wants=qwen3-tts.service
 Wants=speaker-verifier.service
 After=network.target
+After=sing-box.service
+After=searxng.service
+After=sglang-qwen36.service
 After=qwen3-tts.service
 After=speaker-verifier.service
 

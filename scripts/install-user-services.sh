@@ -5,6 +5,7 @@ umask 077
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 SERVICE_DIR="$HOME/.config/systemd/user"
 CONFIG_DIR="$HOME/.config/claude-voice"
+STATE_DIR="$HOME/.local/state/claude-voice"
 VOICE_ENV="$CONFIG_DIR/voice.env"
 QWEN_ENV="$HOME/.qwen3tts-vllm-env"
 QWEN_MODEL="$HOME/Qwen3-TTS-12Hz-0.6B-CustomVoice"
@@ -20,7 +21,8 @@ case "${1:-}" in
   *) echo "Usage: $0 [--rotate-pairing]" >&2; exit 2 ;;
 esac
 
-mkdir -p "$SERVICE_DIR" "$CONFIG_DIR"
+mkdir -p "$SERVICE_DIR" "$CONFIG_DIR" "$STATE_DIR"
+chmod 700 "$STATE_DIR"
 
 if [[ ! -s "$VOICE_ENV" || "$ROTATE_PAIRING" -eq 1 ]]; then
   PAIR_TOKEN="$(openssl rand -hex 24)"
@@ -65,13 +67,22 @@ install -m 0644 "$PROJECT_ROOT/deploy/qwen3-tts.service" "$SERVICE_DIR/qwen3-tts
 install -m 0644 "$PROJECT_ROOT/deploy/speaker-verifier.service" "$SERVICE_DIR/speaker-verifier.service"
 install -m 0644 "$PROJECT_ROOT/deploy/claude-voice.service" "$SERVICE_DIR/claude-voice.service"
 install -m 0644 "$PROJECT_ROOT/deploy/claude-voice-bootstrap.service" "$SERVICE_DIR/claude-voice-bootstrap.service"
+install -m 0644 "$PROJECT_ROOT/deploy/agent-voice.target" "$SERVICE_DIR/agent-voice.target"
+install -m 0644 "$PROJECT_ROOT/deploy/searxng.service" "$SERVICE_DIR/searxng.service"
+install -m 0644 "$PROJECT_ROOT/deploy/agent-voice-watchdog.service" "$SERVICE_DIR/agent-voice-watchdog.service"
+install -m 0644 "$PROJECT_ROOT/deploy/agent-voice-watchdog.timer" "$SERVICE_DIR/agent-voice-watchdog.timer"
+chmod 0755 "$PROJECT_ROOT/scripts/agent-voice-watchdog.py" "$PROJECT_ROOT/scripts/manage-searxng.sh"
 
 systemctl --user daemon-reload
 systemd-analyze --user verify \
   "$SERVICE_DIR/qwen3-tts.service" \
   "$SERVICE_DIR/speaker-verifier.service" \
   "$SERVICE_DIR/claude-voice.service" \
-  "$SERVICE_DIR/claude-voice-bootstrap.service"
+  "$SERVICE_DIR/claude-voice-bootstrap.service" \
+  "$SERVICE_DIR/agent-voice.target" \
+  "$SERVICE_DIR/searxng.service" \
+  "$SERVICE_DIR/agent-voice-watchdog.service" \
+  "$SERVICE_DIR/agent-voice-watchdog.timer"
 systemctl --user enable speaker-verifier.service
 systemctl --user restart speaker-verifier.service
 
@@ -98,6 +109,8 @@ curl --silent --fail http://127.0.0.1:8766/health >/dev/null || {
 
 systemctl --user enable claude-voice.service claude-voice-bootstrap.service
 systemctl --user restart claude-voice.service claude-voice-bootstrap.service
+systemctl --user enable searxng.service agent-voice.target agent-voice-watchdog.timer
+systemctl --user start agent-voice.target agent-voice-watchdog.timer
 if ! loginctl show-user "$USER" -p Linger --value | grep -qx yes; then
   loginctl enable-linger "$USER" || echo "Enable linger manually for pre-login startup: loginctl enable-linger $USER" >&2
 fi

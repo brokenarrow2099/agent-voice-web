@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Agent Voice health watchdog
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=60s
+RandomizedDelaySec=10s
+Persistent=true
+Unit=agent-voice-watchdog.service
+
+[Install]
+WantedBy=timers.target
