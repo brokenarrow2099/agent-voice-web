@@ -1,0 +1,38 @@
+use_default_settings:
+  engines:
+    keep_only: [baidu, bing, duckduckgo]
+
+general:
+  instance_name: SoloAGI Search
+  debug: false
+  enable_metrics: false
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  default_lang: zh-CN
+  formats: [html, json]
+
+server:
+  # Replace this placeholder in the generated local copy before starting.
+  secret_key: ultrasecretkey
+  limiter: false
+  image_proxy: false
+
+outgoing:
+  request_timeout: 6.0
+  max_request_timeout: 10.0
+  extra_proxy_timeout: 2
+  enable_http2: true
+  proxies:
+    all://: [http://172.17.0.1:10809]
+
+engines:
+  - name: baidu
+    disabled: false
+    timeout: 6.0
+  - name: bing
+    disabled: false
+    timeout: 6.0
+  - name: duckduckgo
+    timeout: 6.0

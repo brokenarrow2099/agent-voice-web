@@ -1,0 +1,7 @@
+{"type":"system","subtype":"init","session_id":"11111111-1111-4111-8111-111111111111","tools":["Bash","Read"]}
+{"type":"stream_event","session_id":"11111111-1111-4111-8111-111111111111","event":{"type":"content_block_start","index":0,"content_block":{"type":"text","text":""}}}
+{"type":"stream_event","session_id":"11111111-1111-4111-8111-111111111111","event":{"type":"content_block_delta","index":0,"delta":{"type":"text_delta","text":"先检查一下。"}}}
+{"type":"stream_event","session_id":"11111111-1111-4111-8111-111111111111","event":{"type":"content_block_start","index":1,"content_block":{"type":"tool_use","id":"tool-1","name":"Bash","input":{}}}}
+{"type":"stream_event","session_id":"11111111-1111-4111-8111-111111111111","event":{"type":"content_block_delta","index":1,"delta":{"type":"input_json_delta","partial_json":"{\"command\":\"secret\"}"}}}
+{"type":"assistant","session_id":"11111111-1111-4111-8111-111111111111","message":{"content":[{"type":"text","text":"先检查一下。已经完成。"}],"stop_reason":"end_turn"}}
+{"type":"result","subtype":"success","is_error":false,"duration_ms":42,"result":"先检查一下。已经完成。","session_id":"11111111-1111-4111-8111-111111111111"}

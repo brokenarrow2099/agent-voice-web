@@ -1,0 +1,25 @@
+[Unit]
+Description=Resident Qwen3-TTS on RTX 5060 Ti
+After=network.target
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=exec
+WorkingDirectory=/home/agentvoice/agent-voice-web
+Environment=CUDA_VISIBLE_DEVICES=0
+Environment=CUDA_DEVICE_ORDER=PCI_BUS_ID
+Environment=VLLM_USE_FLASHINFER_SAMPLER=0
+Environment=HF_HUB_OFFLINE=1
+Environment=TRANSFORMERS_OFFLINE=1
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/agentvoice/.qwen3tts-vllm-env/bin/vllm-omni serve /home/agentvoice/Qwen3-TTS-12Hz-0.6B-CustomVoice --omni --deploy-config /home/agentvoice/.qwen3tts-vllm-env/lib/python3.12/site-packages/vllm_omni/deploy/qwen3_tts.yaml --host 127.0.0.1 --port 8766 --trust-remote-code
+ExecStartPost=/home/agentvoice/.qwen3tts-vllm-env/bin/python /home/agentvoice/agent-voice-web/scripts/benchmark-qwen3-tts.py --url http://127.0.0.1:8766 --text 你好。 --wait-seconds 900 --warmup-only
+Restart=on-failure
+RestartSec=8
+TimeoutStartSec=1200
+TimeoutStopSec=45
+KillMode=mixed
+
+[Install]
+WantedBy=default.target

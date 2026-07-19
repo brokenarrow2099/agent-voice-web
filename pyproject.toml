@@ -1,0 +1,43 @@
+[project]
+name = "agent-voice-web"
+version = "0.1.0"
+description = "Real-time browser voice interface for a local AI agent stack"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "aiosqlite>=0.20,<1",
+  "fastapi>=0.116,<1",
+  "faster-whisper>=1.1,<2",
+  "httpx>=0.28,<1",
+  "numpy>=2.0,<3",
+  "pydantic-settings>=2.10,<3",
+  "python-multipart>=0.0.20,<1",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4,<9",
+  "pytest-asyncio>=1.1,<2",
+  "pytest-cov>=6.2,<7",
+  "pyyaml>=6.0,<7",
+  "ruff>=0.12,<1",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = [
+  "backend/voice_app",
+  "backend/tts_service",
+  "backend/public_access",
+  "backend/speaker_service",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+asyncio_mode = "auto"
+
+[tool.uv]
+package = true

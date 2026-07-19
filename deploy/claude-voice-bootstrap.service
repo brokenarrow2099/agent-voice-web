@@ -1,0 +1,15 @@
+[Unit]
+Description=Claude Voice HTTP certificate bootstrap
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/agentvoice/agent-voice-web
+EnvironmentFile=%h/.config/claude-voice/voice.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/agentvoice/agent-voice-web/.venv/bin/uvicorn voice_app.bootstrap:app --host 0.0.0.0 --port 8088
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

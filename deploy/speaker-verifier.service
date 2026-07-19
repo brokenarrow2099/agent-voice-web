@@ -1,0 +1,20 @@
+[Unit]
+Description=CPU-only CAMPPlus speaker verifier
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/agentvoice/agent-voice-web
+Environment="CUDA_VISIBLE_DEVICES="
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/agentvoice/agent-voice-web/backend:/home/agentvoice/agent-service-gateway/index-tts
+Environment=VOICE_SPEAKER_MODEL_PATH=/home/agentvoice/agent-service-gateway/index-tts/checkpoints/hf_cache/campplus_cn_common.bin
+Environment=VOICE_SPEAKER_INDEX_ROOT=/home/agentvoice/agent-service-gateway/index-tts
+ExecStart=/home/agentvoice/.asg-env/bin/uvicorn speaker_service.server:app --host 127.0.0.1 --port 8767 --no-access-log
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=60
+TimeoutStopSec=15
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,12 @@
+[Unit]
+Description=Run Claude Voice dynamic DNS reconciliation
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=2min
+RandomizedDelaySec=15s
+Persistent=true
+Unit=claude-voice-ddns.service
+
+[Install]
+WantedBy=timers.target

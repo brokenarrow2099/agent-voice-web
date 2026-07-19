@@ -1,0 +1,13 @@
+services:
+  searxng:
+    image: searxng/searxng@sha256:e9f02371d94e8cdcc2231c8987d88794654416774e12e47e82ae43943a1baa5a
+    container_name: searxng
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:8080"
+    volumes:
+      - ${SEARXNG_SETTINGS_FILE:?set path to generated settings.yml}:/etc/searxng/settings.yml:ro
+    environment:
+      SEARXNG_BASE_URL: http://127.0.0.1:8081/
+    cap_drop: [ALL]
+    cap_add: [CHOWN, SETGID, SETUID, DAC_OVERRIDE]

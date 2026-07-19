@@ -1,0 +1,6 @@
+{
+  "type": "mixed",
+  "tag": "docker-mixed-in",
+  "listen": "172.17.0.1",
+  "listen_port": 10809
+}

@@ -1,0 +1,26 @@
+[Unit]
+Description=Local Claude continuous voice gateway
+Wants=qwen3-tts.service
+Wants=speaker-verifier.service
+After=network.target
+After=qwen3-tts.service
+After=speaker-verifier.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/agentvoice/agent-voice-web
+EnvironmentFile=%h/.config/claude-voice/voice.env
+Environment=PYTHONUNBUFFERED=1
+Environment=CUDA_VISIBLE_DEVICES=0
+Environment=VOICE_ASR_DEVICE=cuda
+Environment=VOICE_ASR_DEVICE_INDEX=0
+Environment=VOICE_ASR_COMPUTE_TYPE=float16
+ExecStart=/home/agentvoice/agent-voice-web/.venv/bin/uvicorn voice_app.app:app --host 0.0.0.0 --port 8443 --ssl-certfile %h/.config/claude-voice/certs/server.crt --ssl-keyfile %h/.config/claude-voice/certs/server.key --no-access-log
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=180
+TimeoutStopSec=30
+KillMode=mixed
+
+[Install]
+WantedBy=default.target

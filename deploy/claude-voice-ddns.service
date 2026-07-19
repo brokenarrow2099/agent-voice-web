@@ -1,0 +1,18 @@
+[Unit]
+Description=Reconcile the Claude Voice public DNS record
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=%h/.config/claude-voice/dnspod.env
+WorkingDirectory=/home/agentvoice/agent-voice-web
+ExecStart=/home/agentvoice/agent-voice-web/.venv/bin/python -m public_access.cli ddns
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.local/state/claude-voice
+StandardOutput=journal
+StandardError=journal
