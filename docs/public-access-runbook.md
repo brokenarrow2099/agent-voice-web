@@ -2,7 +2,7 @@
 
 本方案把 `https://voice.example.com` 直接发布到家庭动态公网 IPv4。DNSPod DDNS 在本机每两分钟校正一次 A 记录；Nginx 只监听 IPv4 TCP 443，并把 HTTPS/WSS 转发到现有 `https://127.0.0.1:8443`。`8060`、`8766`、`8088` 和 `8443` 均不得做公网映射。
 
-本方案不使用腾讯云 VPS 或任何中继。域名仍由腾讯云 DNSPod 托管，只产生域名续费和现有家庭网络成本。
+本方案不使用VPS 或任何中继。只产生域名续费和现有家庭网络成本。
 
 ## 1. 安装前条件
 
@@ -45,7 +45,7 @@ openssl s_client -connect 127.0.0.1:443 -servername voice.example.com -verify_re
 只有本机 TLS、HTTPS 和 WSS 验证完成后才配置：
 
 1. TP-Link：WAN TCP `443` → `192.0.2.10:443`。
-2. 光猫：公网 TCP `443` → TP-Link WAN `192.0.2.2:443`。
+2. 光猫：公网 TCP `443` → WAN `192.0.2.2:443`。
 
 不要开启 UDP 443、端口 80、DMZ、IPv6 入站、远程路由器管理，或对 `8088`、`8443`、`8060`、`8766` 的映射。
 
