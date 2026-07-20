@@ -8,7 +8,7 @@
 
 - 本地 `qwen3-tts`、`claude-voice`、`claude-voice-bootstrap` 三个用户服务健康。
 - DNSPod CAM 策略只允许计划中列出的 6 个动作，并限定到 DomainId `12345678`。
-- 光猫获得真实但动态的公网 IPv4；本机地址固定为 `192.0.2.10`，TP-Link WAN 地址固定为 `192.0.2.2`。
+- 光猫获得真实但动态的公网 IPv4；本机地址固定为 `192.0.2.10`，WAN 地址固定为 `192.0.2.2`。
 - 配对 Cookie 保持 Secure、HttpOnly、SameSite=Strict；配对链接不得进入聊天记录或日志。
 
 先显式安装三个系统包；项目安装器不会代替你运行包管理器：
@@ -44,7 +44,7 @@ openssl s_client -connect 127.0.0.1:443 -servername voice.example.com -verify_re
 
 只有本机 TLS、HTTPS 和 WSS 验证完成后才配置：
 
-1. TP-Link：WAN TCP `443` → `192.0.2.10:443`。
+1. WAN TCP `443` → `192.0.2.10:443`。
 2. 光猫：公网 TCP `443` → WAN `192.0.2.2:443`。
 
 不要开启 UDP 443、端口 80、DMZ、IPv6 入站、远程路由器管理，或对 `8088`、`8443`、`8060`、`8766` 的映射。
@@ -76,7 +76,7 @@ journalctl --user -u claude-voice-ddns.service -n 20 --no-pager
 
 ## 6. 回滚
 
-回滚时先关闭两级路由器上的 TCP 443 端口映射，顺序为光猫和 TP-Link；确认蜂窝网络已无法连接后，再执行：
+回滚时先关闭两级路由器上的 TCP 443 端口映射，顺序为光猫和路由器；确认蜂窝网络已无法连接后，再执行：
 
 ```bash
 systemctl --user disable --now claude-voice-ddns.timer
